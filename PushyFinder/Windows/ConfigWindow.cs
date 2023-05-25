@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
@@ -25,25 +25,53 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
+        var service = Configuration.DeliveryService;
+        if (ImGui.BeginCombo("Service", service.ToString()))
         {
-            var cfg = Configuration.PushoverAppKey;
-            if (ImGui.InputText("Application key", ref cfg, 2048u))
+            foreach (var item in Enum.GetValues<Deliveries>())
             {
-                Configuration.PushoverAppKey = cfg;
+                if (ImGui.Selectable(item.ToString(), Configuration.DeliveryService == item)) Configuration.DeliveryService = item;
             }
         }
+        if (service == Deliveries.Pushover)
         {
-            var cfg = Configuration.PushoverUserKey;
-            if (ImGui.InputText("User key", ref cfg, 2048u))
             {
-                Configuration.PushoverUserKey = cfg;
+                var cfg = Configuration.PushoverAppKey;
+                if (ImGui.InputText("Application key", ref cfg, 2048u))
+                {
+                    Configuration.PushoverAppKey = cfg;
+                }
+            }
+            {
+                var cfg = Configuration.PushoverUserKey;
+                if (ImGui.InputText("User key", ref cfg, 2048u))
+                {
+                    Configuration.PushoverUserKey = cfg;
+                }
+            }
+            {
+                var cfg = Configuration.PushoverDevice;
+                if (ImGui.InputText("Device name", ref cfg, 2048u))
+                {
+                    Configuration.PushoverDevice = cfg;
+                }
             }
         }
+        else if (service == Deliveries.Ntfy)
         {
-            var cfg = Configuration.PushoverDevice;
-            if (ImGui.InputText("Device name", ref cfg, 2048u))
             {
-                Configuration.PushoverDevice = cfg;
+                var cfg = Configuration.NtfyTopic;
+                if (ImGui.InputText("Topic", ref cfg, 2048u))
+                {
+                    Configuration.NtfyTopic = cfg;
+                }
+            }
+            {
+                var cfg = Configuration.NtfyDomain;
+                if (ImGui.InputText("Domain", ref cfg, 2048u))
+                {
+                    Configuration.NtfyDomain = cfg;
+                }
             }
         }
         {
@@ -57,7 +85,7 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Button("Send test notification"))
         {
             notifSentMessageTimer.Start();
-            PushoverDelivery.Deliver("Test notification", 
+            DeliveryManager.Deliver().Invoke("Test notification", 
                                      "If you received this, PushyFinder is configured correctly.");
         }
 

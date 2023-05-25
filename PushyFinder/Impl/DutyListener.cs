@@ -29,6 +29,6 @@ public class DutyListener
             return;
         
         var dutyName = e.RowId == 0 ? "Duty Roulette" : e.Name.ToDalamudString().TextValue;
-        PushoverDelivery.Deliver($"Duty pop", $"Duty registered: '{dutyName}'.");
+        DeliveryManager.Deliver().Invoke($"Duty pop", $"Duty registered: '{dutyName}'.");
     }
 }

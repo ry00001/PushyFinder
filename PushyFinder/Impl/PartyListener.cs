@@ -31,12 +31,12 @@ public static class PartyListener
 
         if (m.PartyCount == 8)
         {
-            PushoverDelivery.Deliver("Party full",
+            DeliveryManager.Deliver().Invoke("Party full",
                                      $"{m.Name} (Lv{m.Level} {jobAbbr}) joins the party.\nParty recruitment ended. All spots have been filled.");
         }
         else
         {
-            PushoverDelivery.Deliver($"{m.PartyCount}/8: Party join",
+            DeliveryManager.Deliver().Invoke($"{m.PartyCount}/8: Party join",
                                      $"{m.Name} (Lv{m.Level} {jobAbbr}) joins the party.");
         }
     }
@@ -47,7 +47,7 @@ public static class PartyListener
         
         var jobAbbr = LuminaDataUtil.GetJobAbbreviation(m.JobId);
 
-        PushoverDelivery.Deliver($"{m.PartyCount-1}/8: Party leave",
+        DeliveryManager.Deliver().Invoke($"{m.PartyCount-1}/8: Party leave",
                                  $"{m.Name} (Lv{m.Level} {jobAbbr}) has left the party.");
     }
 }

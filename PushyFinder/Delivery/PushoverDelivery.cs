@@ -5,10 +5,11 @@ using Flurl.Http;
 
 namespace PushyFinder.Delivery;
 
-public static class PushoverDelivery
+public abstract class PushoverDelivery : IDelivery
 {
+    public static string Name => "Pushover.net";
     public static readonly string PUSHOVER_API = "https://api.pushover.net/1/messages.json";
-    
+
     public static void Deliver(string title, string text = "")
     {
         if (Plugin.Configuration.PushoverAppKey.Length == 0 ||
